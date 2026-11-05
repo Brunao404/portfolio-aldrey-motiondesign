@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Reel — Aldrey Ramos</title>
+  <meta name="description" content="Demo Reel de Aldrey Ramos — motion design, edição de vídeo e animação. Recife, PE." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Demo Reel — Aldrey Ramos" />
+  <meta property="og:description" content="Compilado dos melhores trabalhos em motion design, edição e animação." />
+  <meta property="og:url"         content="https://aldreyramotion.com/demoreel.html" />
+  <meta property="og:image"       content="https://aldreyramotion.com/assets/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale"      content="pt_BR" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Demo Reel — Aldrey Ramos" />
+  <meta name="twitter:description" content="Compilado dos melhores trabalhos em motion design, edição e animação." />
+  <meta name="twitter:image"      content="https://aldreyramotion.com/assets/og-image.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="cur" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+<div id="pt" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav" role="navigation" aria-label="Navegação principal">
+  <a href="index.html" class="nav-logo">Aldrey<span>.</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="demoreel.html" class="active" aria-current="page">Demo Reel</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="contato.html">Contato</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="drawer" role="menu">
+  <a href="index.html"               role="menuitem">Work</a>
+  <a href="demoreel.html" class="active" role="menuitem" aria-current="page">Demo Reel</a>
+  <a href="sobre.html"               role="menuitem">Sobre</a>
+  <a href="contato.html"             role="menuitem">Contato</a>
+</div>
+
+<!-- HERO -->
+<header class="reel-hero" role="banner">
+  <p class="hero-eyebrow fi" aria-hidden="true">Compilado</p>
+  <h1 class="hero-title fi">
+    Demo<br><em>Reel</em><span class="acc">.</span>
+  </h1>
+  <p class="hero-sub fi">
+    Um recorte do que faço — movimento, ritmo e narrativa visual.
+  </p>
+</header>
+
+<!-- VÍDEO PRINCIPAL -->
+<main role="main">
+  <div id="reel-main-wrap" style="padding: 0 0 2px;">
+    <div class="reel-video fi" id="reel-video">
+      <div class="reel-skel">
+        <div class="reel-skel-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span>Reel em breve</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- outros reels -->
+  <section id="outros-section" style="display:none; padding: 60px 32px 0;" aria-label="Outros reels">
+    <p class="eyebrow fi" style="margin-bottom:28px;">Outros Reels</p>
+    <div class="reel-grid fi" id="outros-grid"></div>
+  </section>
+
+  <!-- CTA -->
+  <div style="text-align:center; padding: 80px 32px 0;">
+    <p class="fi" style="color:#444; font-size:.85rem; font-weight:300;
+       margin-bottom:24px; max-width:360px; margin-left:auto; margin-right:auto;
+       line-height:1.8;">
+      Gostou do que viu? Veja todos os projetos ou entre em contato.
+    </p>
+    <div class="fi" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <a href="index.html"   class="btn btn-fill">Ver todos os trabalhos</a>
+      <a href="contato.html" class="btn btn-out">Fale comigo</a>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <p class="foot-copy">&copy; <span id="yr"></span> Aldrey Ramos</p>
+  <nav class="foot-links" aria-label="Links externos">
+    <a href="https://www.behance.net/aldreyramos"          target="_blank" rel="noopener noreferrer">Behance</a>
+    <a href="https://www.linkedin.com/in/aldrey-ramotion/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="mailto:aldreyjramos73@gmail.com">Email</a>
+  </nav>
+</footer>
+
+<script src="js/projects.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function () {
+  const principal = PROJETOS.find(p => p.categoria === 'demoreels' && p.destaque);
+  const outros    = PROJETOS.filter(p => p.categoria === 'demoreels' && !p.destaque);
+
+  /* reel principal */
+  const reel = document.getElementById('reel-video');
+  if (principal && !isPlaceholder(principal)) {
+    reel.innerHTML = `
+      <iframe src="${getVideoEmbedUrl(principal)}"
+              title="${principal.titulo}"
+              allow="autoplay; fullscreen"
+              allowfullscreen loading="lazy"></iframe>`;
+  }
+
+  /* outros reels */
+  if (outros.length) {
+    const sec  = document.getElementById('outros-section');
+    const grid = document.getElementById('outros-grid');
+    sec.style.display = 'block';
+
+    outros.forEach(p => {
+      const prevUrl = getPreviewUrl(p);
+      const fbUrl   = getPreviewFallbackUrl(p);
+      const noFile  = isPlaceholder(p);
+      grid.innerHTML += `
+        <a href="project.html?id=${encodeURIComponent(p.id)}"
+           class="card fi" aria-label="${p.titulo}">
+          ${noFile
+            ? `<div class="card-skel"></div>`
+            : `<img class="card-thumb" src="${prevUrl}" alt="Prévia de ${p.titulo}"
+                    loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='${fbUrl}'}">`
+          }
+          <div class="card-overlay" aria-hidden="true"></div>
+          <div class="card-info">
+            <p class="card-cat">${p.ano || 'Demoreel'}</p>
+            <p class="card-name">${p.titulo}</p>
+          </div>
+        </a>`;
+    });
+  }
+})();
+</script>
+</body>
+</html>

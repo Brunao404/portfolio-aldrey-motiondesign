@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sobre — Aldrey Ramos</title>
+  <meta name="description" content="Aldrey Ramos — motion designer, editor de vídeo e ilustrador de Recife, PE. Disponível para freelance e full-time." />
+  <meta property="og:type"        content="profile" />
+  <meta property="og:title"       content="Sobre — Aldrey Ramos" />
+  <meta property="og:description" content="Motion designer, editor de vídeo e ilustrador de Recife, PE." />
+  <meta property="og:url"         content="https://aldreyramotion.com/sobre.html" />
+  <meta property="og:image"       content="https://aldreyramotion.com/assets/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale"      content="pt_BR" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Sobre — Aldrey Ramos" />
+  <meta name="twitter:description" content="Motion designer, editor de vídeo e ilustrador de Recife, PE." />
+  <meta name="twitter:image"      content="https://aldreyramotion.com/assets/og-image.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="cur" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+<div id="pt" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav" role="navigation" aria-label="Navegação principal">
+  <a href="index.html" class="nav-logo">Aldrey<span>.</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="demoreel.html">Demo Reel</a></li>
+    <li><a href="sobre.html" class="active" aria-current="page">Sobre</a></li>
+    <li><a href="contato.html">Contato</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="drawer" role="menu">
+  <a href="index.html"               role="menuitem">Work</a>
+  <a href="demoreel.html"            role="menuitem">Demo Reel</a>
+  <a href="sobre.html" class="active" role="menuitem" aria-current="page">Sobre</a>
+  <a href="contato.html"             role="menuitem">Contato</a>
+</div>
+
+<!-- SOBRE -->
+<main role="main">
+  <div class="sobre-wrap">
+
+    <!-- foto -->
+    <aside class="sobre-photo-col fi" aria-label="Foto de Aldrey Ramos">
+      <div class="sobre-photo-wrap">
+        <img
+          src="assets/aldrey-foto.jpg"
+          alt="Aldrey Ramos, motion designer, de braços cruzados com ilustrações coloridas ao fundo"
+          class="sobre-photo"
+          onerror="this.closest('.sobre-photo-wrap').innerHTML='<div class=sobre-skel>Foto em breve</div>'"
+        />
+        <!-- tag flutuante com nome -->
+        <div class="sobre-photo-tag" aria-hidden="true">
+          <span class="spt-name">Aldrey Ramos</span>
+          <span class="spt-role">aldreyramotion</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- texto -->
+    <section aria-label="Sobre Aldrey Ramos">
+
+      <p class="eyebrow fi">Quem sou</p>
+
+      <h1 class="sobre-big fi">
+        Aldrey<br>
+        <span>Ramos.</span>
+      </h1>
+
+      <p class="sobre-bio fi">
+        Estudo Cinema e Audiovisual e vivo na interseção entre
+        <strong>movimento, imagem e narrativa</strong>. Trabalho com edição de vídeo,
+        motion design, ilustração e design — áreas que se misturam no meu processo
+        criativo de um jeito que não consigo mais separar.
+        <br><br>
+        Sou entusiasta de animação e de tudo que tem <strong>ritmo visual</strong>:
+        aquela sensação de que cada frame foi pensado com intenção.
+        Atualmente faço parte do time do <strong>Imago Dei Studio</strong>, em Recife,
+        e sigo aberto a projetos freelance e novas oportunidades de full-time.
+      </p>
+
+      <!-- disponibilidade -->
+      <div class="sobre-section fi">
+        <span class="meta-label">Disponibilidade</span>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <span class="avail-badge"><span class="avail-dot"></span>Freelance</span>
+          <span class="avail-badge"><span class="avail-dot"></span>Full-time</span>
+        </div>
+      </div>
+
+      <!-- áreas -->
+      <div class="sobre-section fi">
+        <span class="meta-label">Áreas de atuação</span>
+        <ul class="areas" role="list" style="margin-top:12px;">
+          <li><span class="area-pill">Edição de Vídeo</span></li>
+          <li><span class="area-pill">Motion Design</span></li>
+          <li><span class="area-pill">Ilustração</span></li>
+          <li><span class="area-pill">Design Gráfico</span></li>
+          <li><span class="area-pill">Animação 2D</span></li>
+          <li><span class="area-pill">VFX &amp; Composição</span></li>
+        </ul>
+      </div>
+
+      <!-- ferramentas -->
+      <div class="sobre-section fi">
+        <span class="meta-label">Ferramentas</span>
+        <ul class="tools-grid" role="list" style="margin-top:12px;">
+          <li><span class="tool-pill">After Effects</span></li>
+          <li><span class="tool-pill">Premiere Pro</span></li>
+          <li><span class="tool-pill">Photoshop</span></li>
+        </ul>
+      </div>
+
+      <!-- base -->
+      <div class="sobre-section fi">
+        <span class="meta-label">Base</span>
+        <p style="color:#555; font-size:.88rem; font-weight:300; margin-top:8px;">
+          Recife, Pernambuco, Brasil
+        </p>
+      </div>
+
+      <!-- CTAs -->
+      <div class="sobre-ctas fi">
+        <a href="https://www.behance.net/aldreyramos"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-out">Behance</a>
+        <a href="https://www.linkedin.com/in/aldrey-ramotion/"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn-out">LinkedIn</a>
+        <a href="contato.html" class="btn btn-fill">Fale comigo</a>
+      </div>
+
+    </section>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <p class="foot-copy">&copy; <span id="yr"></span> Aldrey Ramos</p>
+  <nav class="foot-links" aria-label="Links externos">
+    <a href="https://www.behance.net/aldreyramos"          target="_blank" rel="noopener noreferrer">Behance</a>
+    <a href="https://www.linkedin.com/in/aldrey-ramotion/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="mailto:aldreyjramos73@gmail.com">Email</a>
+  </nav>
+</footer>
+
+<script src="js/projects.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

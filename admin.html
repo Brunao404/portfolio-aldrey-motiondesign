@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Aldrey Ramos</title>
+  <!-- Não indexar esta página -->
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- Segurança: bloqueia execução de scripts inline não autorizados -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 script-src 'self' 'unsafe-inline';
+                 style-src  'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 font-src   'self' https://fonts.gstatic.com;
+                 img-src    'self' data: https://drive.google.com https://lh3.googleusercontent.com;
+                 frame-src  'none';
+                 object-src 'none';
+                 base-uri   'self';" />
+  <!-- Bloqueia esta página de ser carregada em iframes (clickjacking) -->
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080808; --bg2: #111; --bg3: #161616;
+      --text: #f2f0eb; --muted: #555; --border: rgba(255,255,255,.07);
+      --accent: #ff3d00; --green: #00c878;
+      --font-d: 'Syne', sans-serif; --font-b: 'Inter', sans-serif;
+    }
+    html, body { background: var(--bg); color: var(--text); font-family: var(--font-b); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .login-box {
+      width: 100%; max-width: 380px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 40px 36px;
+    }
+    .login-logo {
+      font-family: var(--font-d);
+      font-size: 1.1rem; font-weight: 800;
+      margin-bottom: 32px; display: block;
+    }
+    .login-logo span { color: var(--accent); }
+    .login-title {
+      font-family: var(--font-d);
+      font-size: 1.4rem; font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .login-sub {
+      font-size: .8rem; color: var(--muted);
+      margin-bottom: 28px; font-weight: 300;
+    }
+    .fg { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .fg label {
+      font-family: var(--font-d); font-size: .6rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    }
+    .fg input {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 2px; color: var(--text);
+      font-family: var(--font-b); font-size: .9rem; font-weight: 300;
+      padding: 11px 14px; outline: none;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .fg input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255,61,0,.12); }
+    .login-btn {
+      width: 100%; padding: 13px;
+      background: var(--accent); color: #fff; border: none; border-radius: 2px;
+      font-family: var(--font-d); font-size: .75rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      cursor: pointer; margin-top: 8px;
+      transition: background .25s;
+    }
+    .login-btn:hover { background: #ff5520; }
+    .login-error {
+      display: none; margin-top: 14px;
+      background: rgba(255,61,0,.1); border: 1px solid rgba(255,61,0,.25);
+      border-radius: 2px; padding: 10px 14px;
+      font-size: .78rem; color: #ff6b4a;
+    }
+
+    /* ── ADMIN PANEL ── */
+    #admin-panel { display: none; }
+
+    .admin-nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(8,8,8,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-logo { font-family: var(--font-d); font-size: .95rem; font-weight: 800; }
+    .admin-logo span { color: var(--accent); }
+    .admin-logout {
+      font-family: var(--font-d); font-size: .62rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); background: none; border: none;
+      cursor: pointer; transition: color .2s;
+    }
+    .admin-logout:hover { color: var(--accent); }
+
+    .admin-wrap {
+      max-width: 1000px; margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    .admin-title {
+      font-family: var(--font-d); font-size: 1.8rem; font-weight: 800;
+      letter-spacing: -.02em; margin-bottom: 8px;
+    }
+    .admin-sub { font-size: .82rem; color: var(--muted); font-weight: 300; margin-bottom: 40px; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .tab-btn {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); background: none; border: none;
+      padding: 10px 18px; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color .2s, border-color .2s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.on { color: var(--text); border-bottom-color: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.on { display: block; }
+
+    /* ── LISTA DE PROJETOS ── */
+    .proj-list { display: flex; flex-direction: column; gap: 2px; }
+    .proj-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 2px; padding: 16px 20px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 12px; align-items: center;
+    }
+    .proj-item:hover { border-color: rgba(255,255,255,.12); }
+    .pi-title { font-family: var(--font-d); font-size: .88rem; font-weight: 700; margin-bottom: 4px; }
+    .pi-meta { font-size: .72rem; color: var(--muted); font-weight: 300; }
+    .pi-cat {
+      font-family: var(--font-d); font-size: .58rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-left: 8px;
+    }
+    .pi-actions { display: flex; gap: 8px; }
+    .pi-btn {
+      font-family: var(--font-d); font-size: .6rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 7px 14px; border-radius: 100px;
+      border: 1px solid var(--border); color: var(--muted);
+      background: none; cursor: pointer; transition: all .2s; white-space: nowrap;
+    }
+    .pi-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .pi-btn.danger:hover { border-color: #ff4444; color: #ff4444; }
+
+    /* ── FORMULÁRIO EDIÇÃO / NOVO ── */
+    #edit-panel {
+      display: none;
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,.8); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    #edit-panel.open { display: flex; }
+    .edit-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 4px; padding: 36px;
+      width: 100%; max-width: 600px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .edit-title {
+      font-family: var(--font-d); font-size: 1.1rem; font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid .full { grid-column: 1/-1; }
+    .fg-sm { display: flex; flex-direction: column; gap: 5px; }
+    .fg-sm label {
+      font-family: var(--font-d); font-size: .58rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    }
+    .fg-sm input, .fg-sm select, .fg-sm textarea {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 2px; color: var(--text);
+      font-family: var(--font-b); font-size: .85rem; font-weight: 300;
+      padding: 10px 12px; outline: none;
+      transition: border-color .2s;
+    }
+    .fg-sm input:focus, .fg-sm select:focus, .fg-sm textarea:focus {
+      border-color: var(--accent);
+    }
+    .fg-sm select option { background: var(--bg3); }
+    .fg-sm textarea { min-height: 80px; resize: vertical; }
+    .edit-actions { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
+    .btn-save {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 11px 24px; border-radius: 100px;
+      background: var(--accent); color: #fff; border: none;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-save:hover { background: #ff5520; }
+    .btn-cancel {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 11px 24px; border-radius: 100px;
+      background: none; color: var(--muted);
+      border: 1px solid var(--border); cursor: pointer; transition: all .2s;
+    }
+    .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
+
+    /* ── INSTRUÇÕES ── */
+    .instructions {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px 32px;
+    }
+    .instructions h3 {
+      font-family: var(--font-d); font-size: .9rem; font-weight: 800;
+      margin-bottom: 16px; color: var(--text);
+    }
+    .instructions ol, .instructions ul {
+      padding-left: 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .instructions li { font-size: .85rem; color: var(--muted); font-weight: 300; line-height: 1.6; }
+    .instructions li strong { color: var(--text); font-weight: 500; }
+    .instructions code {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 2px; padding: 2px 6px;
+      font-size: .8rem; color: var(--accent);
+      font-family: monospace;
+    }
+    .instr-section { margin-bottom: 28px; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+      background: var(--green); color: #000;
+      font-family: var(--font-d); font-size: .7rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 12px 24px; border-radius: 100px;
+      z-index: 200; opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; }
+
+    /* ── EXPORT ── */
+    .export-box {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 2px; padding: 20px;
+      font-family: monospace; font-size: .75rem;
+      color: #aaa; white-space: pre-wrap;
+      max-height: 400px; overflow-y: auto;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+    .btn-export {
+      font-family: var(--font-d); font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 11px 24px; border-radius: 100px;
+      background: none; color: var(--text);
+      border: 1px solid var(--border); cursor: pointer;
+      transition: all .2s; margin-bottom: 0;
+    }
+    .btn-export:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .admin-wrap { padding: 32px 20px 60px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .edit-box { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TELA DE LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <span class="login-logo">Aldrey<span>.</span> Admin</span>
+    <h1 class="login-title">Área restrita</h1>
+    <p class="login-sub">Acesso exclusivo para Aldrey Ramos.</p>
+    <div class="fg">
+      <label for="pwd">Senha</label>
+      <input type="password" id="pwd" placeholder="••••••••"
+             autocomplete="current-password" />
+    </div>
+    <button class="login-btn" id="login-btn">Entrar</button>
+    <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- ── PAINEL ADMIN ── -->
+<div id="admin-panel">
+
+  <nav class="admin-nav">
+    <span class="admin-logo">Aldrey<span>.</span> Admin</span>
+    <button class="admin-logout" id="logout-btn">Sair</button>
+  </nav>
+
+  <div class="admin-wrap">
+    <h1 class="admin-title">Painel de projetos</h1>
+    <p class="admin-sub">Gerencie todos os projetos do portfólio — adicione, edite ou remova.</p>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn on" data-tab="projetos">Projetos</button>
+      <button class="tab-btn"   data-tab="novo">+ Novo projeto</button>
+      <button class="tab-btn"   data-tab="exportar">Exportar JS</button>
+      <button class="tab-btn"   data-tab="instrucoes">Instruções</button>
+    </div>
+
+    <!-- TAB: Projetos -->
+    <div class="tab-panel on" id="tab-projetos">
+      <div class="proj-list" id="proj-list"></div>
+    </div>
+
+    <!-- TAB: Novo projeto -->
+    <div class="tab-panel" id="tab-novo">
+      <div class="edit-box" style="position:relative;max-width:100%;border:none;padding:0;background:none;">
+        <div id="form-novo"></div>
+      </div>
+    </div>
+
+    <!-- TAB: Exportar JS -->
+    <div class="tab-panel" id="tab-exportar">
+      <p style="font-size:.82rem;color:var(--muted);font-weight:300;margin-bottom:20px;line-height:1.7;">
+        Depois de editar os projetos aqui, clique em <strong style="color:var(--text)">Gerar projects.js</strong>
+        e copie o conteúdo para o arquivo <code>js/projects.js</code> na pasta do site.
+        As mudanças ficam salvas no navegador até você exportar.
+      </p>
+      <button class="btn-export" id="btn-export">Gerar projects.js</button>
+      <div class="export-box" id="export-box" style="display:none;"></div>
+      <button class="btn-save" id="btn-copy" style="display:none;margin-top:12px;">Copiar tudo</button>
+    </div>
+
+    <!-- TAB: Instruções -->
+    <div class="tab-panel" id="tab-instrucoes">
+      <div class="instructions">
+
+        <div class="instr-section">
+          <h3>Como adicionar um projeto novo</h3>
+          <ol>
+            <li>Clique na aba <strong>+ Novo projeto</strong>.</li>
+            <li>Preencha o título, categoria, ano, descrição e ferramentas.</li>
+            <li>Cole o <strong>ID do Google Drive</strong> do vídeo no campo "ID do arquivo".</li>
+            <li>Clique em <strong>Salvar projeto</strong>.</li>
+            <li>Vá na aba <strong>Exportar JS</strong>, gere o arquivo e copie para <code>js/projects.js</code>.</li>
+          </ol>
+        </div>
+
+        <div class="instr-section">
+          <h3>Como obter o ID do Google Drive</h3>
+          <ol>
+            <li>Abra o vídeo no Google Drive.</li>
+            <li>Clique em <strong>Compartilhar</strong> → <strong>Qualquer pessoa com o link</strong>.</li>
+            <li>Copie o link. Formato: <code>https://drive.google.com/file/d/<strong>ID_AQUI</strong>/view</code></li>
+            <li>O ID é a parte entre <code>/d/</code> e <code>/view</code>.</li>
+          </ol>
+        </div>
+
+        <div class="instr-section">
+          <h3>Como renomear um projeto</h3>
+          <ol>
+            <li>Na lista de projetos, clique em <strong>Editar</strong> no projeto desejado.</li>
+            <li>Altere o título no campo "Título".</li>
+            <li>Clique em <strong>Salvar</strong>.</li>
+            <li>Exporte o <code>projects.js</code> atualizado.</li>
+          </ol>
+        </div>
+
+        <div class="instr-section">
+          <h3>Senha do admin</h3>
+          <ul>
+            <li>Para trocar a senha, abra <code>admin.html</code>, localize <code>SENHA_HASH</code> e substitua pelo hash SHA-256 da nova senha.</li>
+            <li>Gere o hash em: <strong style="color:var(--text)">emn178.github.io/online-tools/sha256.html</strong></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL EDIÇÃO ── -->
+<div id="edit-panel">
+  <div class="edit-box">
+    <h2 class="edit-title" id="edit-modal-title">Editar projeto</h2>
+    <div id="edit-form-wrap"></div>
+    <div class="edit-actions">
+      <button class="btn-cancel" id="edit-cancel">Cancelar</button>
+      <button class="btn-save"   id="edit-save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="js/projects.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   CONFIGURAÇÃO DE SEGURANÇA
+   
+   Para trocar a senha:
+   1. Acesse https://emn178.github.io/online-tools/sha256.html
+   2. Digite a nova senha e copie o hash gerado
+   3. Substitua o valor de SENHA_HASH abaixo
+   
+   Hash atual = SHA-256 de: aldrey2025
+══════════════════════════════════════════════ */
+const SENHA_HASH = '9e5986232db3c919b289b81f37c83e5bb32bf553164d0c0f25bd3d4edddde091';
+
+// Tempo máximo de sessão: 2 horas (em ms)
+const SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000;
+
+// Máximo de tentativas antes de bloquear
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 5 * 60 * 1000; // 5 minutos de bloqueio
+
+/* ── Hash SHA-256 via Web Crypto API ── */
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray  = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* ══════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════ */
+const loginScreen = document.getElementById('login-screen');
+const adminPanel  = document.getElementById('admin-panel');
+
+function getAttempts() {
+  return JSON.parse(sessionStorage.getItem('login_attempts') || '{"count":0,"lockedUntil":0}');
+}
+function saveAttempts(data) {
+  sessionStorage.setItem('login_attempts', JSON.stringify(data));
+}
+
+function checkLogin() {
+  const ok        = sessionStorage.getItem('admin_ok') === '1';
+  const loginTime = parseInt(sessionStorage.getItem('admin_login_time') || '0');
+  if (ok && Date.now() - loginTime > SESSION_TIMEOUT_MS) {
+    // sessão expirada
+    sessionStorage.removeItem('admin_ok');
+    sessionStorage.removeItem('admin_login_time');
+    return false;
+  }
+  return ok;
+}
+
+async function doLogin(pwd) {
+  const attempts = getAttempts();
+  const errorEl  = document.getElementById('login-error');
+
+  // Verifica bloqueio por tentativas
+  if (attempts.lockedUntil > Date.now()) {
+    const mins = Math.ceil((attempts.lockedUntil - Date.now()) / 60000);
+    errorEl.textContent = `Muitas tentativas. Aguarde ${mins} minuto(s).`;
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const hash = await sha256(pwd);
+
+  if (hash === SENHA_HASH) {
+    // Login bem-sucedido — zera tentativas
+    saveAttempts({ count: 0, lockedUntil: 0 });
+    sessionStorage.setItem('admin_ok', '1');
+    sessionStorage.setItem('admin_login_time', String(Date.now()));
+    loginScreen.style.display = 'none';
+    adminPanel.style.display  = 'block';
+    renderProjList();
+    renderNovoForm(document.getElementById('form-novo'));
+  } else {
+    // Falha — incrementa contador
+    attempts.count++;
+    if (attempts.count >= MAX_ATTEMPTS) {
+      attempts.lockedUntil = Date.now() + LOCKOUT_MS;
+      attempts.count = 0;
+      errorEl.textContent = 'Conta bloqueada por 5 minutos após múltiplas tentativas.';
+    } else {
+      const restantes = MAX_ATTEMPTS - attempts.count;
+      errorEl.textContent = `Senha incorreta. ${restantes} tentativa(s) restante(s).`;
+    }
+    saveAttempts(attempts);
+    errorEl.style.display = 'block';
+    // Limpa o campo
+    document.getElementById('pwd').value = '';
+  }
+}
+
+if (checkLogin()) {
+  loginScreen.style.display = 'none';
+  adminPanel.style.display  = 'block';
+} else {
+  // Garante que o painel não aparece sem autenticação
+  adminPanel.style.display = 'none';
+}
+
+document.getElementById('login-btn').addEventListener('click', () => {
+  doLogin(document.getElementById('pwd').value);
+});
+document.getElementById('pwd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin(document.getElementById('pwd').value);
+});
+document.getElementById('logout-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('admin_ok');
+  sessionStorage.removeItem('admin_login_time');
+  sessionStorage.removeItem('login_attempts');
+  location.reload();
+});
+
+/* ══════════════════════════════════════════════
+   DADOS — carrega do localStorage ou do projects.js
+══════════════════════════════════════════════ */
+let projetos = JSON.parse(localStorage.getItem('admin_projetos') || 'null')
+               || JSON.parse(JSON.stringify(PROJETOS)); // cópia profunda
+
+function salvarLocal() {
+  localStorage.setItem('admin_projetos', JSON.stringify(projetos));
+}
+
+/* ══════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('on');
+  });
+});
+
+/* ══════════════════════════════════════════════
+   LISTA DE PROJETOS
+══════════════════════════════════════════════ */
+function renderProjList() {
+  const list = document.getElementById('proj-list');
+  if (!list) return;
+  list.innerHTML = '';
+
+  projetos.forEach((p, idx) => {
+    const catLabel = CATEGORIAS.find(c => c.slug === p.categoria)?.label || p.categoria;
+    const item = document.createElement('div');
+    item.className = 'proj-item';
+    item.innerHTML = `
+      <div>
+        <p class="pi-title">${p.titulo} <span class="pi-cat">${catLabel}</span></p>
+        <p class="pi-meta">
+          ${p.ano || '—'}
+          &nbsp;·&nbsp; ID: <code style="font-size:.7rem;opacity:.5;">${p.idArquivo?.slice(0,18) || 'sem ID'}…</code>
+        </p>
+      </div>
+      <div class="pi-actions">
+        <button class="pi-btn" data-action="edit" data-idx="${idx}">Editar</button>
+        <button class="pi-btn danger" data-action="del" data-idx="${idx}">Remover</button>
+      </div>`;
+    list.appendChild(item);
+  });
+
+  list.addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.idx);
+    if (btn.dataset.action === 'edit') openEditModal(idx);
+    if (btn.dataset.action === 'del')  deleteProjeto(idx);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   FORMULÁRIO (reutilizado em editar e novo)
+══════════════════════════════════════════════ */
+function buildForm(container, data = {}) {
+  const cats = CATEGORIAS.filter(c => c.slug !== 'todos');
+  container.innerHTML = `
+    <div class="form-grid">
+      <div class="fg-sm full">
+        <label>Título</label>
+        <input name="titulo" value="${data.titulo || ''}" placeholder="Nome do projeto" />
+      </div>
+      <div class="fg-sm">
+        <label>Categoria</label>
+        <select name="categoria">
+          ${cats.map(c => `<option value="${c.slug}" ${data.categoria===c.slug?'selected':''}>${c.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fg-sm">
+        <label>Ano</label>
+        <input name="ano" value="${data.ano || ''}" placeholder="2025" />
+      </div>
+      <div class="fg-sm full">
+        <label>Descrição</label>
+        <textarea name="descricao">${data.descricao || ''}</textarea>
+      </div>
+      <div class="fg-sm full">
+        <label>ID do arquivo (Google Drive)</label>
+        <input name="idArquivo" value="${data.idArquivo||''}" placeholder="1ABC123XYZ..." />
+      </div>
+      <div class="fg-sm full">
+        <label>ID da prévia/thumbnail (Google Drive — pode ser igual)</label>
+        <input name="idPrevia" value="${data.idPrevia||''}" placeholder="1ABC123XYZ..." />
+      </div>
+      <div class="fg-sm">
+        <label>Tipo</label>
+        <select name="tipo">
+          <option value="video"  ${(data.tipo||'video')==='video' ?'selected':''}>Vídeo</option>
+          <option value="imagem" ${data.tipo==='imagem'?'selected':''}>Imagem</option>
+        </select>
+      </div>
+      <div class="fg-sm">
+        <label>Ferramentas (separe com vírgula)</label>
+        <input name="ferramentas" value="${(data.ferramentas||[]).join(', ')}" placeholder="After Effects, Premiere Pro" />
+      </div>
+      <div class="fg-sm full">
+        <label>Link do Behance (opcional)</label>
+        <input name="linkBehance" value="${data.linkBehance||''}" placeholder="https://www.behance.net/..." />
+      </div>
+      <div class="fg-sm">
+        <label>Destaque no Demo Reel?</label>
+        <select name="destaque">
+          <option value="false" ${!data.destaque?'selected':''}>Não</option>
+          <option value="true"  ${data.destaque?'selected':''}>Sim</option>
+        </select>
+      </div>
+    </div>`;
+}
+
+function getFormData(container) {
+  const get = name => container.querySelector(`[name="${name}"]`)?.value?.trim() || '';
+  return {
+    id:          get('titulo').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '-' + Date.now().toString(36),
+    titulo:      get('titulo'),
+    categoria:   get('categoria'),
+    ano:         get('ano'),
+    descricao:   get('descricao'),
+    ferramentas: get('ferramentas').split(',').map(s=>s.trim()).filter(Boolean),
+    tipo:        get('tipo'),
+    fonte:       'drive',
+    idArquivo:   get('idArquivo') || 'PLACEHOLDER_ID',
+    idPrevia:    get('idPrevia')  || get('idArquivo') || 'PLACEHOLDER_ID',
+    linkBehance: get('linkBehance'),
+    destaque:    get('destaque') === 'true',
+  };
+}
+
+/* ══════════════════════════════════════════════
+   NOVO PROJETO
+══════════════════════════════════════════════ */
+function renderNovoForm(container) {
+  if (!container) return;
+  buildForm(container);
+  const saveBtn = document.createElement('div');
+  saveBtn.style.cssText = 'margin-top:20px;display:flex;gap:10px;';
+  saveBtn.innerHTML = `<button class="btn-save" id="novo-save-btn">Salvar projeto</button>`;
+  container.appendChild(saveBtn);
+
+  document.getElementById('novo-save-btn').addEventListener('click', () => {
+    const data = getFormData(container);
+    if (!data.titulo) { showToast('Preencha o título!', '#ff4444'); return; }
+    projetos.unshift(data);
+    salvarLocal();
+    renderProjList();
+    buildForm(container); // limpa o form
+    renderNovoForm(container);
+    showToast('Projeto adicionado!');
+    // volta para aba de projetos
+    document.querySelector('[data-tab="projetos"]').click();
+  });
+}
+
+/* ══════════════════════════════════════════════
+   EDITAR PROJETO
+══════════════════════════════════════════════ */
+let editingIdx = null;
+
+function openEditModal(idx) {
+  editingIdx = idx;
+  const panel = document.getElementById('edit-panel');
+  const wrap  = document.getElementById('edit-form-wrap');
+  document.getElementById('edit-modal-title').textContent = `Editar: ${projetos[idx].titulo}`;
+  buildForm(wrap, projetos[idx]);
+  panel.classList.add('open');
+}
+
+document.getElementById('edit-cancel').addEventListener('click', () => {
+  document.getElementById('edit-panel').classList.remove('open');
+});
+
+document.getElementById('edit-save').addEventListener('click', () => {
+  if (editingIdx === null) return;
+  const wrap = document.getElementById('edit-form-wrap');
+  const data = getFormData(wrap);
+  data.id = projetos[editingIdx].id; // preserva o ID original
+  projetos[editingIdx] = data;
+  salvarLocal();
+  renderProjList();
+  document.getElementById('edit-panel').classList.remove('open');
+  showToast('Projeto atualizado!');
+});
+
+/* ══════════════════════════════════════════════
+   REMOVER PROJETO
+══════════════════════════════════════════════ */
+function deleteProjeto(idx) {
+  if (!confirm(`Remover "${projetos[idx].titulo}"?`)) return;
+  projetos.splice(idx, 1);
+  salvarLocal();
+  renderProjList();
+  showToast('Projeto removido.', '#ff6b4a');
+}
+
+/* ══════════════════════════════════════════════
+   EXPORTAR projects.js
+══════════════════════════════════════════════ */
+document.getElementById('btn-export').addEventListener('click', () => {
+  const box    = document.getElementById('export-box');
+  const cpyBtn = document.getElementById('btn-copy');
+
+  const catsStr = JSON.stringify(CATEGORIAS, null, 2);
+  const projStr = JSON.stringify(projetos, null, 2);
+
+  const output = `// projects.js — gerado pelo Admin em ${new Date().toLocaleString('pt-BR')}
+// NÃO edite manualmente se usar o painel admin.
+
+const CATEGORIAS = ${catsStr};
+
+const PROJETOS = ${projStr};
+
+function getPreviewUrl(projeto) {
+  if (projeto.fonte === 'local') {
+    return projeto.tipo === 'imagem'
+      ? \`/media/images/\${projeto.id}.jpg\`
+      : \`/media/gifs/\${projeto.id}.gif\`;
+  }
+  if (projeto.idPrevia && projeto.idPrevia !== 'PLACEHOLDER_ID') {
+    return \`https://drive.google.com/thumbnail?id=\${projeto.idPrevia}&sz=w800\`;
+  }
+  return '';
+}
+
+function getPreviewFallbackUrl(projeto) {
+  if (projeto.idPrevia && projeto.idPrevia !== 'PLACEHOLDER_ID') {
+    return \`https://lh3.googleusercontent.com/d/\${projeto.idPrevia}\`;
+  }
+  return '';
+}
+
+function getVideoEmbedUrl(projeto) {
+  if (projeto.fonte === 'drive')   return \`https://drive.google.com/file/d/\${projeto.idArquivo}/preview\`;
+  if (projeto.fonte === 'youtube') return \`https://www.youtube.com/embed/\${projeto.idArquivo}?autoplay=1&rel=0\`;
+  if (projeto.fonte === 'vimeo')   return \`https://player.vimeo.com/video/\${projeto.idArquivo}?autoplay=1\`;
+  if (projeto.fonte === 'local')   return \`/media/videos/\${projeto.id}.mp4\`;
+  return '';
+}
+
+function isPlaceholder(projeto) {
+  return !projeto.idArquivo || projeto.idArquivo === 'PLACEHOLDER_ID';
+}`;
+
+  box.textContent = output;
+  box.style.display = 'block';
+  cpyBtn.style.display = 'inline-flex';
+});
+
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const text = document.getElementById('export-box').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('Copiado para a área de transferência!'));
+});
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+function showToast(msg, bg = '#00c878') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = bg;
+  t.style.color = bg === '#00c878' ? '#000' : '#fff';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* Init */
+if (checkLogin()) {
+  renderProjList();
+  renderNovoForm(document.getElementById('form-novo'));
+}
+</script>
+</body>
+</html>

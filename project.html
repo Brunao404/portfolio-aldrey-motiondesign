@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto — Aldrey Ramos</title>
+  <meta name="description" content="Página do projeto — portfólio de Aldrey Ramos, motion designer de Recife." />
+  <meta property="og:type"   content="article" />
+  <meta property="og:locale" content="pt_BR" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="cur" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+<div id="pt" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav" role="navigation" aria-label="Navegação principal">
+  <a href="index.html" class="nav-logo">Aldrey<span>.</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html"     class="active">Work</a></li>
+    <li><a href="demoreel.html">Demo Reel</a></li>
+    <li><a href="sobre.html">Sobre</a></li>
+    <li><a href="contato.html">Contato</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="drawer" role="menu">
+  <a href="index.html"     class="active" role="menuitem">Work</a>
+  <a href="demoreel.html"                 role="menuitem">Demo Reel</a>
+  <a href="sobre.html"                    role="menuitem">Sobre</a>
+  <a href="contato.html"                  role="menuitem">Contato</a>
+</div>
+
+<!-- ESTADOS DE CARREGAMENTO -->
+<div id="state-loading" style="
+  min-height:100svh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:16px;
+  color:#555; font-family:'Syne',sans-serif; font-size:.68rem;
+  letter-spacing:.14em; text-transform:uppercase;">
+  <div style="
+    width:32px; height:32px; border-radius:50%;
+    border:1.5px solid #222; border-top-color:#ff3d00;
+    animation:spin .7s linear infinite;">
+  </div>
+  <span>Carregando</span>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<div id="state-404" style="
+  min-height:100svh; display:none; flex-direction:column;
+  align-items:center; justify-content:center; gap:24px; text-align:center;
+  padding:32px;">
+  <p style="font-family:'Syne',sans-serif;font-size:4rem;font-weight:800;
+     letter-spacing:-.04em;color:#1a1a1a;">404</p>
+  <p style="color:#555;font-size:.9rem;font-weight:300;">Projeto não encontrado.</p>
+  <a href="index.html" class="btn btn-out">← Voltar para Work</a>
+</div>
+
+<!-- CONTEÚDO -->
+<main id="proj-main" style="display:none;" role="main">
+
+  <!-- breadcrumb -->
+  <div class="pg fi" style="padding-bottom:0;">
+    <nav aria-label="Breadcrumb" style="
+      display:flex; align-items:center; gap:8px;
+      font-family:'Syne',sans-serif; font-size:.62rem; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase; color:#444;
+      margin-bottom:40px;">
+      <a href="index.html" style="color:#444; transition:color .25s;"
+         onmouseover="this.style.color='#ff3d00'" onmouseout="this.style.color='#444'">Work</a>
+      <span style="color:#222;">›</span>
+      <span id="bc-cat" style="color:#333;"></span>
+      <span style="color:#222;">›</span>
+      <span id="bc-title" style="color:#555;" aria-current="page"></span>
+    </nav>
+
+    <!-- eyebrow + título -->
+    <p class="eyebrow fi" id="proj-cat-tag"></p>
+    <h1 class="pg-title fi" id="proj-title"></h1>
+  </div>
+
+  <!-- mídia principal -->
+  <div id="proj-media" class="fi" style="padding: 0;"></div>
+
+  <!-- body -->
+  <div class="pg">
+    <div class="proj-body fi">
+
+      <!-- coluna esquerda: descrição + behance -->
+      <div>
+        <p class="proj-desc" id="proj-desc"></p>
+        <div id="proj-behance"></div>
+      </div>
+
+      <!-- coluna direita: metadados -->
+      <aside class="proj-meta" aria-label="Detalhes do projeto">
+        <div>
+          <span class="meta-label">Categoria</span>
+          <p class="meta-val" id="proj-cat-val"></p>
+        </div>
+        <div id="proj-ano-block">
+          <span class="meta-label">Ano</span>
+          <p class="meta-val" id="proj-ano-val"></p>
+        </div>
+        <div>
+          <span class="meta-label">Ferramentas</span>
+          <div class="tool-tags" id="proj-tools"></div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- navegação prev / next -->
+    <nav class="proj-nav fi" id="proj-nav" aria-label="Projeto anterior e próximo"></nav>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <p class="foot-copy">&copy; <span id="yr"></span> Aldrey Ramos</p>
+  <nav class="foot-links" aria-label="Links externos">
+    <a href="https://www.behance.net/aldreyramos"          target="_blank" rel="noopener noreferrer">Behance</a>
+    <a href="https://www.linkedin.com/in/aldrey-ramotion/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="mailto:aldreyjramos73@gmail.com">Email</a>
+  </nav>
+</footer>
+
+<script src="js/projects.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function renderProject() {
+  const id  = new URLSearchParams(location.search).get('id');
+  const stL = document.getElementById('state-loading');
+  const st4 = document.getElementById('state-404');
+  const pm  = document.getElementById('proj-main');
+
+  function show(el) {
+    stL.style.display = 'none';
+    st4.style.display = 'none';
+    pm.style.display  = 'none';
+    el.style.display  = el === st4 ? 'flex' : 'block';
+  }
+
+  if (!id) { show(st4); return; }
+
+  const p = PROJETOS.find(x => x.id === id);
+  if (!p)  { show(st4); return; }
+
+  const catLabel = CATEGORIAS.find(c => c.slug === p.categoria)?.label || p.categoria;
+
+  /* title + OG */
+  document.title = `${p.titulo} — Aldrey Ramos`;
+
+  /* breadcrumb */
+  document.getElementById('bc-cat').textContent   = catLabel;
+  document.getElementById('bc-title').textContent = p.titulo;
+
+  /* eyebrow + título */
+  document.getElementById('proj-cat-tag').textContent = catLabel;
+  document.getElementById('proj-title').textContent   = p.titulo;
+
+  /* ano */
+  if (p.ano) {
+    document.getElementById('proj-ano-val').textContent = p.ano;
+  } else {
+    document.getElementById('proj-ano-block').style.display = 'none';
+  }
+
+  /* categoria */
+  document.getElementById('proj-cat-val').textContent = catLabel;
+
+  /* ferramentas */
+  const toolsWrap = document.getElementById('proj-tools');
+  (p.ferramentas || []).forEach(f => {
+    const s = document.createElement('span');
+    s.className   = 'tool-tag';
+    s.textContent = f;
+    toolsWrap.appendChild(s);
+  });
+
+  /* descrição */
+  document.getElementById('proj-desc').textContent = p.descricao || '';
+
+  /* behance */
+  if (p.linkBehance) {
+    document.getElementById('proj-behance').innerHTML = `
+      <a href="${p.linkBehance}" target="_blank" rel="noopener noreferrer" class="proj-behance"
+         aria-label="Ver no Behance">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074
+          0-5.513-1.987-5.513-5.517 0-3.616 2.409-5.65 5.425-5.65 3.031 0
+          4.891 1.945 5.063 4.724H15.017c.052 1.9 1.351 2.98 2.843 2.98
+          1.237 0 2.058-.639 2.452-1.537h3.414zm-7.741-3.97c-.04-1.565
+          -1.016-2.52-2.423-2.52-1.389 0-2.397.987-2.507 2.52h4.93zM7.178
+          16.8c1.258 0 1.906-.534 1.906-1.393 0-.919-.716-1.24-1.906-1.24
+          H4.878v2.633h2.3zm-.5-5.01c1.103 0 1.72-.41 1.72-1.253
+          0-.815-.617-1.16-1.72-1.16H4.878v2.413h1.8zM0 5.5h7.5
+          c1.95 0 4.034.7 4.034 3.143 0 1.407-.79 2.282-1.966
+          2.738 1.498.386 2.432 1.465 2.432 3.153 0 2.847-2.137
+          3.966-4.734 3.966H0V5.5z"/>
+        </svg>
+        Ver no Behance
+      </a>`;
+  }
+
+  /* mídia */
+  const mediaEl = document.getElementById('proj-media');
+  const embedUrl = getVideoEmbedUrl(p);
+  const prevUrl  = getPreviewUrl(p);
+  const fbUrl    = getPreviewFallbackUrl(p);
+  const noFile   = isPlaceholder(p);
+
+  if (p.tipo === 'imagem') {
+    mediaEl.className = 'fi';
+    mediaEl.style.cssText = 'padding:0 32px; max-width:1100px; margin:0 auto;';
+    if (!noFile && prevUrl) {
+      mediaEl.innerHTML = `
+        <div class="proj-img">
+          <img src="${prevUrl}" alt="${p.titulo}" loading="lazy"
+               onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='${fbUrl}'}" />
+        </div>`;
+    } else {
+      mediaEl.innerHTML = skelBox('Imagem em breve');
+    }
+  } else {
+    mediaEl.className = 'fi';
+    mediaEl.style.cssText = 'padding:0;';
+    if (!noFile && embedUrl) {
+      mediaEl.innerHTML = `
+        <div class="proj-video">
+          <iframe src="${embedUrl}" title="${p.titulo}"
+                  allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+        </div>`;
+    } else {
+      mediaEl.innerHTML = `<div class="proj-video">${skelBox('Vídeo em breve')}</div>`;
+    }
+  }
+
+  /* nav prev/next */
+  const idx  = PROJETOS.findIndex(x => x.id === id);
+  const prev = PROJETOS[idx - 1];
+  const next = PROJETOS[idx + 1];
+  const nav  = document.getElementById('proj-nav');
+
+  nav.innerHTML = `
+    ${prev
+      ? `<a href="project.html?id=${encodeURIComponent(prev.id)}"
+            class="pn-item" aria-label="Anterior: ${prev.titulo}">
+           <span class="pn-dir">← Anterior</span>
+           <span class="pn-name">${prev.titulo}</span>
+         </a>`
+      : '<div></div>'
+    }
+    ${next
+      ? `<a href="project.html?id=${encodeURIComponent(next.id)}"
+            class="pn-item right" aria-label="Próximo: ${next.titulo}">
+           <span class="pn-dir">Próximo →</span>
+           <span class="pn-name">${next.titulo}</span>
+         </a>`
+      : '<div></div>'
+    }`;
+
+  show(pm);
+
+  /* scroll reveal */
+  requestAnimationFrame(() => {
+    const obs = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }});
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+  });
+
+  function skelBox(label) {
+    return `
+      <div style="position:relative;width:100%;padding-bottom:56.25%;background:#111;">
+        <div class="card-skel" style="position:absolute;inset:0;"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;
+             align-items:center;justify-content:center;gap:10px;color:#444;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.2" opacity=".4">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span style="font-family:'Syne',sans-serif;font-size:.6rem;
+                letter-spacing:.14em;text-transform:uppercase;opacity:.4;">${label}</span>
+        </div>
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>

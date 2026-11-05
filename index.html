@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aldrey Ramos — Motion Designer & Editor de Vídeo | Recife</title>
+  <meta name="description" content="Portfólio de Aldrey Ramos — Motion Designer, Editor de Vídeo e Ilustrador de Recife, PE." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Aldrey Ramos — Motion Designer & Editor de Vídeo" />
+  <meta property="og:description" content="Portfólio de Aldrey Ramos — Motion Designer, Editor de Vídeo e Ilustrador de Recife, PE." />
+  <meta property="og:url"         content="https://aldreyramotion.com/" />
+  <meta property="og:image"       content="https://aldreyramotion.com/assets/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"   content="Aldrey Ramos — Motion Designer & Editor de Vídeo" />
+  <meta property="og:locale"      content="pt_BR" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Aldrey Ramos — Motion Designer & Editor de Vídeo" />
+  <meta name="twitter:description" content="Portfólio de Aldrey Ramos — Motion Designer, Editor de Vídeo e Ilustrador de Recife, PE." />
+  <meta name="twitter:image"      content="https://aldreyramotion.com/assets/og-image.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ══════════════════════════════════════
+       SCROLL SNAP — página inteira
+    ══════════════════════════════════════ */
+    html {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+    }
+
+    /* ══════════════════════════════════════
+       SEÇÃO 1 — SPLASH / WELCOME
+    ══════════════════════════════════════ */
+    #splash-section {
+      position: relative;
+      width: 100%; height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      overflow: hidden;
+      background: #080808;
+    }
+
+    /* Foto de fundo */
+    #bg-photo {
+      position: absolute; inset: 0;
+      z-index: 1;
+    }
+    #bg-photo img, #bg-photo video {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      filter: brightness(.5) saturate(1.1);
+      opacity: 0;
+      animation: bg-in 1.4s ease .1s forwards;
+    }
+    #bg-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right,  rgba(8,8,8,.85) 0%, rgba(8,8,8,.2) 25%, rgba(8,8,8,.2) 75%, rgba(8,8,8,.85) 100%),
+        linear-gradient(to bottom, rgba(8,8,8,.5) 0%, transparent 30%, rgba(8,8,8,.7) 100%);
+    }
+    @keyframes bg-in { to { opacity: 1; } }
+
+    /* Orb + anéis */
+    #orb-layer {
+      position: absolute; inset: 0;
+      z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .orb {
+      position: absolute;
+      width: min(70vw,70vh); height: min(70vw,70vh);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,61,0,.13) 0%, rgba(255,61,0,.04) 45%, transparent 70%);
+      animation: orb-pulse 4s ease-in-out infinite;
+    }
+    @keyframes orb-pulse {
+      0%,100% { transform: scale(1); opacity: .8; }
+      50%      { transform: scale(1.08); opacity: 1; }
+    }
+
+    .ring-1 {
+      position: absolute;
+      width: min(62vw,62vh); height: min(62vw,62vh);
+      border-radius: 50%;
+      border: 1px dashed rgba(255,61,0,.2);
+      animation: spin-cw 40s linear infinite;
+    }
+    .ring-2 {
+      position: absolute;
+      width: min(72vw,72vh); height: min(72vw,72vh);
+      border-radius: 50%;
+      border: 1px solid rgba(255,61,0,.08);
+      animation: spin-ccw 60s linear infinite;
+    }
+    .ring-3 {
+      position: absolute;
+      width: min(80vw,80vh); height: min(80vw,80vh);
+      border-radius: 50%;
+      border: 1px dotted rgba(255,255,255,.05);
+      animation: spin-cw 50s linear infinite;
+    }
+    @keyframes spin-cw  { to { transform: rotate(360deg);  } }
+    @keyframes spin-ccw { to { transform: rotate(-360deg); } }
+
+    /* Bolinhas orbitando via wrapper que gira ao redor do centro.
+       O wrapper é um círculo de raio R centrado na tela.
+       A bolinha fica no topo (top: 0, left: 50%) do wrapper.
+       O wrapper gira — a bolinha orbita. Simples e sem conflito de transforms. */
+
+    .dot-orbit {
+      position: absolute;
+      /* raio da órbita: metade do diâmetro do ring-1 */
+      width: min(62vw,62vh); height: min(62vw,62vh);
+      border-radius: 50%;
+      /* começa em posições diferentes para distribuir as bolinhas */
+    }
+    .dot-orbit-1 { animation: spin-cw  8s linear infinite; }
+    .dot-orbit-2 { animation: spin-ccw 11s linear infinite; animation-delay: -3s; }
+    .dot-orbit-3 {
+      width: min(72vw,72vh); height: min(72vw,72vh);
+      animation: spin-cw 15s linear infinite; animation-delay: -7s;
+    }
+
+    .dot-orbit::before {
+      content: '';
+      position: absolute;
+      /* topo do círculo, centralizado horizontalmente */
+      top: 0; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+    }
+    .dot-orbit-1::before {
+      width: 7px; height: 7px;
+      background: #ff3d00;
+      box-shadow: 0 0 10px 3px rgba(255,61,0,.6);
+    }
+    .dot-orbit-2::before {
+      width: 5px; height: 5px;
+      background: #fff;
+      box-shadow: 0 0 8px 2px rgba(255,255,255,.4);
+    }
+    .dot-orbit-3::before {
+      width: 4px; height: 4px;
+      background: rgba(255,255,255,.6);
+      box-shadow: 0 0 6px 2px rgba(255,255,255,.25);
+    }
+
+    /* Sparks */
+    .spark {
+      position: absolute; width: 1.5px;
+      background: linear-gradient(to bottom, transparent, rgba(255,61,0,.8), transparent);
+      border-radius: 1px;
+      animation: spark-anim 4s ease-in-out infinite; opacity: 0;
+    }
+    .spark:nth-child(1)  { height:40px; top:calc(50% - min(35vw,35vh) - 20px); left:50%; animation-delay:0s; }
+    .spark:nth-child(2)  { height:28px; top:calc(50% - min(28vw,28vh)); left:calc(50% + min(28vw,28vh)); animation-delay:1.3s; }
+    .spark:nth-child(3)  { height:36px; top:calc(50% + min(28vw,28vh) - 36px); left:calc(50% + min(30vw,30vh)); animation-delay:2.6s; }
+    .spark:nth-child(4)  { height:22px; top:calc(50% + min(30vw,30vh)); left:calc(50% - min(10vw,10vh)); animation-delay:.8s; }
+    .spark:nth-child(5)  { height:32px; top:calc(50% - min(20vw,20vh)); left:calc(50% - min(32vw,32vh)); animation-delay:2s; }
+    @keyframes spark-anim {
+      0%           { opacity: 0; }
+      15%, 40%     { opacity: .7; }
+      55%          { opacity: .3; }
+      70%, 100%    { opacity: 0; }
+    }
+
+    /* Nome */
+    #name-layer {
+      position: absolute; inset: 0;
+      z-index: 3;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      pointer-events: none;
+      padding-bottom: 14vh;
+    }
+    .nl {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 10vw, 9rem);
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+      line-height: .9;
+      opacity: 0;
+      transform: translateY(28px);
+      animation: line-in .8s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    .nl:nth-child(1) { animation-delay:.2s; color:rgba(242,240,235,.7); }
+    .nl:nth-child(2) { animation-delay:.38s; color:#ff3d00; }
+    @keyframes line-in { to { opacity:1; transform:none; } }
+
+    /* Botão + subtítulo */
+    #splash-bottom {
+      position: absolute;
+      bottom: 44px; left: 0; right: 0;
+      z-index: 4;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px;
+    }
+    #enter-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: #ff3d00; color: #fff;
+      border: none; border-radius: 100px;
+      padding: 16px 36px;
+      font-family: 'Syne', sans-serif;
+      font-size: .8rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      cursor: none;
+      opacity: 0;
+      animation: fade-up .7s cubic-bezier(.4,0,.2,1) .6s forwards;
+      transition: transform .3s ease, background .25s, box-shadow .3s;
+    }
+    #enter-btn:hover { transform: scale(1.06); background: #ff5520; box-shadow: 0 8px 40px rgba(255,61,0,.5); }
+    #enter-btn:active { transform: scale(.97); }
+    .btn-arrow { font-size: 1rem; transition: transform .3s ease; }
+    #enter-btn:hover .btn-arrow { transform: translateX(5px); }
+
+    #splash-sub {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(.58rem,1.1vw,.7rem);
+      font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(242,240,235,.35);
+      opacity: 0; text-align: center;
+      animation: fade-up .6s cubic-bezier(.4,0,.2,1) .75s forwards;
+    }
+
+    /* Scroll hint */
+    #scroll-hint {
+      position: absolute;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      opacity: 0;
+      animation: fade-up .5s ease 1.2s forwards;
+    }
+    #scroll-hint span {
+      font-family: 'Syne', sans-serif;
+      font-size: .55rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.2);
+    }
+    .scroll-line {
+      width: 1px; height: 32px;
+      background: linear-gradient(to bottom, rgba(255,61,0,.6), transparent);
+      animation: scroll-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%,100% { opacity: .4; transform: scaleY(1); }
+      50%      { opacity: 1;  transform: scaleY(1.15); }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ══════════════════════════════════════
+       SEÇÃO 2 — PORTFÓLIO
+    ══════════════════════════════════════ */
+    #work-section {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      /* altura mínima: deixa o conteúdo do portfólio crescer naturalmente */
+      min-height: 100vh;
+    }
+
+    /* Botão voltar ao topo */
+    #back-top {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      z-index: 500;
+      width: 44px; height: 44px;
+      background: #ff3d00;
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .35s ease, transform .25s ease, background .2s;
+    }
+    #back-top.visible { opacity: 1; pointer-events: auto; }
+    #back-top:hover { transform: scale(1.12); background: #ff5520; }
+    #back-top svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .nl { font-size: clamp(3rem, 14vw, 5rem); }
+      #enter-btn { padding: 14px 28px; }
+      #splash-bottom { bottom: 60px; gap: 12px; }
+      #scroll-hint { bottom: 14px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .dot, .dot-2, .dot-3,
+      .dot::before, .dot-2::before, .dot-3::before,
+      .ring-1, .ring-2, .ring-3 {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"      aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+<div id="pt"       aria-hidden="true"></div>
+
+<!-- BOTÃO VOLTAR AO TOPO -->
+<button id="back-top" aria-label="Voltar ao início">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
+
+<!-- ══════════════════════════════════════
+     SEÇÃO 1 — SPLASH / WELCOME
+══════════════════════════════════════ -->
+<section id="splash-section">
+
+  <!-- noise -->
+  <canvas id="noise" aria-hidden="true"
+    style="position:absolute;inset:0;width:100%;height:100%;opacity:.035;pointer-events:none;z-index:0;"></canvas>
+
+  <!-- vídeo de fundo animado -->
+  <div id="bg-photo" aria-hidden="true">
+    <video
+      src="assets/VID_20261103_133358_092.mp4"
+      autoplay loop muted playsinline
+      aria-hidden="true"
+      onerror="this.style.display='none'">
+    </video>
+  </div>
+
+  <!-- orb + anéis + bolinhas -->
+  <div id="orb-layer" aria-hidden="true">
+    <div class="orb"></div>
+    <div class="ring-1"></div>
+    <div class="ring-2"></div>
+    <div class="ring-3"></div>
+    <div class="dot-orbit dot-orbit-1"></div>
+    <div class="dot-orbit dot-orbit-2"></div>
+    <div class="dot-orbit dot-orbit-3"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+  </div>
+
+  <!-- nome -->
+  <div id="name-layer" aria-hidden="true">
+    <span class="nl">ALDREY</span>
+    <span class="nl">RAMOS</span>
+  </div>
+
+  <!-- botão + subtítulo -->
+  <div id="splash-bottom">
+    <button id="enter-btn" aria-label="Ver trabalhos">
+      <span class="btn-arrow">→</span>
+      <span>Ver meus trabalhos</span>
+    </button>
+    <p id="splash-sub" aria-hidden="true">Motion Designer &nbsp;·&nbsp; Editor de Vídeo &nbsp;·&nbsp; Ilustrador</p>
+  </div>
+
+  <!-- indicador de scroll -->
+  <div id="scroll-hint" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     SEÇÃO 2 — PORTFÓLIO
+══════════════════════════════════════ -->
+<section id="work-section">
+
+  <!-- NAV -->
+  <nav id="nav" role="navigation" aria-label="Navegação principal">
+    <a href="#splash-section" class="nav-logo" aria-label="Início">Aldrey<span>.</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="#work-section" class="active" aria-current="page">Work</a></li>
+      <li><a href="demoreel.html">Demo Reel</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="contato.html">Contato</a></li>
+    </ul>
+    <button class="nav-burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-drawer" id="drawer" role="menu">
+    <a href="#work-section" class="active" role="menuitem" aria-current="page">Work</a>
+    <a href="demoreel.html"              role="menuitem">Demo Reel</a>
+    <a href="sobre.html"                 role="menuitem">Sobre</a>
+    <a href="contato.html"               role="menuitem">Contato</a>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero" role="banner">
+    <p class="hero-eyebrow">Portfólio</p>
+    <h1 class="hero-title">Todos os <em>trabalhos</em></h1>
+  </header>
+
+  <!-- FILTRO -->
+  <div id="filter-wrap" role="tablist" aria-label="Filtrar projetos"></div>
+
+  <!-- GRID -->
+  <main id="grid" role="list" aria-label="Projetos" aria-live="polite">
+    <p id="grid-empty" role="status">Nenhum projeto nessa categoria.</p>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <p class="foot-copy">&copy; <span id="yr"></span> Aldrey Ramos</p>
+    <nav class="foot-links" aria-label="Links externos">
+      <a href="https://www.behance.net/aldreyramos"          target="_blank" rel="noopener noreferrer">Behance</a>
+      <a href="https://www.linkedin.com/in/aldrey-ramotion/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:aldreyjramos73@gmail.com">Email</a>
+    </nav>
+  </footer>
+
+</section>
+
+<!-- SCRIPTS -->
+<script src="js/projects.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+/* ══════════════════════════════════════
+   SPLASH — lógica exclusiva desta página
+══════════════════════════════════════ */
+
+/* ── Noise canvas ── */
+(function () {
+  const c = document.getElementById('noise');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  function resize() { c.width = innerWidth; c.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  (function draw() {
+    const img = ctx.createImageData(c.width, c.height);
+    const d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const v = Math.random() * 255 | 0;
+      d[i] = d[i+1] = d[i+2] = v; d[i+3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ── Botão "Ver meus trabalhos" → scroll para seção portfólio ── */
+document.getElementById('enter-btn').addEventListener('click', function () {
+  document.getElementById('work-section').scrollIntoView({ behavior: 'smooth' });
+});
+
+/* ── Tecla Enter / Espaço também faz scroll ── */
+document.addEventListener('keydown', function (e) {
+  if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === document.getElementById('enter-btn')) {
+    e.preventDefault();
+    document.getElementById('work-section').scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+/* ── Botão voltar ao topo ── */
+var backBtn = document.getElementById('back-top');
+backBtn.addEventListener('click', function () {
+  document.getElementById('splash-section').scrollIntoView({ behavior: 'smooth' });
+});
+
+/* Mostra o botão quando a seção portfólio está visível */
+var sectionObserver = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.target.id === 'work-section') {
+      backBtn.classList.toggle('visible', e.isIntersecting);
+    }
+  });
+}, { threshold: 0.1 });
+sectionObserver.observe(document.getElementById('work-section'));
+</script>
+</body>
+</html>
