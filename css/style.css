@@ -1272,8 +1272,14 @@ body.splash-open { overflow: hidden; }
 .netlify-identity-button,
 #netlify-badge,
 [id*="netlify"],
-[class*="netlify-badge"] {
+[class*="netlify-badge"],
+#nl-badge,
+.nl-badge,
+.nl-wrap,
+.nl-card,
+[data-nl-ready] {
   display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
+  visibility: hidden !important;
 }
