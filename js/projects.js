@@ -32,7 +32,7 @@ const CATEGORIAS = [
   { slug: "campanha-politica", label: "Campanha Política"  },
   { slug: "campanhas",         label: "Campanhas"          },
   { slug: "demoreels",         label: "Demoreels"          },
-  { slug: "edicoes-inserts",   label: "Edições e Inserts"  },
+  { slug: "edicoes-inserts",   label: "Edições "           },
   { slug: "eventos",           label: "Eventos"            },
   { slug: "flyers",            label: "Flyers"             },
   { slug: "ia",                label: "IA"                 },
