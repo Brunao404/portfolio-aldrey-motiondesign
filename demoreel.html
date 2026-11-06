@@ -138,8 +138,12 @@
           ${noFile
             ? `<div class="card-skel"></div>`
             : `<img class="card-thumb" src="${prevUrl}" alt="Prévia de ${p.titulo}"
-                    loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='${fbUrl}'}">`
+                    loading="lazy"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
           }
+          <div class="card-skel" style="display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,61,0,.4)" stroke-width="1.5" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
           <div class="card-overlay" aria-hidden="true"></div>
           <div class="card-info">
             <p class="card-cat">${p.ano || 'Demoreel'}</p>
