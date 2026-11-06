@@ -1268,18 +1268,9 @@ body.splash-open { overflow: hidden; }
 }
 
 /* Esconder badge do Netlify */
-[data-netlify-deploy-id],
-.netlify-identity-button,
-#netlify-badge,
-[id*="netlify"],
-[class*="netlify-badge"],
-#nl-badge,
-.nl-badge,
-.nl-wrap,
-.nl-card,
-[data-nl-ready] {
+#nl-badge, .nl-badge, .nl-wrap, .nl-card, [data-nl-ready] {
   display: none !important;
+  visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  visibility: hidden !important;
 }

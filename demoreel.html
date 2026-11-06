@@ -154,5 +154,15 @@
   }
 })();
 </script>
+<script>
+(function () {
+  function removeNetlifyBadge() {
+    document.querySelectorAll('#nl-badge, .nl-badge, .nl-wrap, [data-nl-ready]').forEach(el => el.remove());
+    document.querySelectorAll('body > div[style*="z-index: 2147483645"]').forEach(el => el.remove());
+  }
+  removeNetlifyBadge();
+  new MutationObserver(removeNetlifyBadge).observe(document.body, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>
