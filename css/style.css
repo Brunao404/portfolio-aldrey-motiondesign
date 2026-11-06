@@ -1266,3 +1266,14 @@ body.splash-open { overflow: hidden; }
   .hero-l2 { font-size: clamp(1rem, 4.5vw, 1.5rem); }
   .hero-l3 { font-size: .58rem; }
 }
+
+/* Esconder badge do Netlify */
+[data-netlify-deploy-id],
+.netlify-identity-button,
+#netlify-badge,
+[id*="netlify"],
+[class*="netlify-badge"] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
